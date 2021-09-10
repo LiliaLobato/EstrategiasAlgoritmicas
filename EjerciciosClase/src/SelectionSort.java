@@ -1,33 +1,29 @@
-
 import java.util.Arrays;
 import UsefullArray.ArrayMethods;
 import UsefullArray.ArrayMethods.*;
 
-public class InsertionSort {
+public class SelectionSort {
 
 	static int cmps = 0; // Comparaciones
 	static int movs = 0; // Movimientos
 
-	static ArrayCase AC = ArrayCase.ordenado; // aleatorio,ordenado,invetido
+	static ArrayCase AC = ArrayCase.invertido; // aleatorio,ordenado,invetido
 
-	static boolean greaterThan(int x, int y) {
-		cmps++;
-		return x > y;
-	}
-
-	static void insertion(int[] array) {
-		final int N = array.length;
-		for (int p = 1; p < N; p++) {
-			int pivot = array[p];
-			movs++;
-			int i = p - 1;
-			while (i >= 0 && greaterThan(array[i], pivot)) {
-				array[i + 1] = array[i];
-				movs++;
-				i--;
+	static void selection(int[] array) {
+		for (int p = 0; p < array.length - 1; p++) {
+			int min = p;
+			for (int i = p + 1; i < array.length; i++) {
+				cmps++;
+				if (array[i] < array[min]) {
+					min = i;
+				}
 			}
-			array[i + 1] = pivot;
-			movs++;
+			if (p != min) {
+				int tmp = array[p];
+				array[p] = array[min];
+				array[min] = tmp;
+				movs += 3;
+			}
 		}
 	}
 
@@ -46,7 +42,7 @@ public class InsertionSort {
 		int cmps_sum = 0, cmps_prom = 0;
 
 		System.out.println(Arrays.toString(array));
-		insertion(array);
+		selection(array);
 		System.out.println(Arrays.toString(array));
 		System.out.println(ArrayMethods.isSorted(array) + "\n");
 
@@ -55,7 +51,7 @@ public class InsertionSort {
 			int ejec = N / 100;
 			for (int M = 1; M <= ejec; M++) {
 				int[] array2 = ArrayMethods.getArray(AC, N, 1, N);
-				insertion(array2);
+				selection(array2);
 				movs_sum = movs + movs_sum;
 				cmps_sum = cmps + cmps_sum;
 				movs = 0;
@@ -70,4 +66,5 @@ public class InsertionSort {
 			movs_sum = 0;
 		}
 	}
+
 }
