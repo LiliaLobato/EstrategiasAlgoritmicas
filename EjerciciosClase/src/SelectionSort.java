@@ -27,14 +27,6 @@ public class SelectionSort {
 		}
 	}
 
-	public static int[] createArray(int N, int min, int max) {
-		int[] array = new int[N];
-		for (int i = 0; i < N; i++) {
-			array[i] = min + (int) ((max - min + 1) * Math.random());
-		}
-		return array;
-	}
-
 	public static void main(String[] args) {
 		// TEST
 		int[] array = ArrayMethods.getArray(AC, 10, 1, 10);
