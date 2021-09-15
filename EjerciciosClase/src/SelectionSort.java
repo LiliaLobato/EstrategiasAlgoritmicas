@@ -24,6 +24,8 @@ public class SelectionSort {
 				array[min] = tmp;
 				movs += 3;
 			}
+
+			//System.out.println(Arrays.toString(array));
 		}
 	}
 
@@ -39,7 +41,7 @@ public class SelectionSort {
 		System.out.println(ArrayMethods.isSorted(array) + "\n");
 
 		System.out.printf("N\tCOMPARACIONES\tMOVIMIENTOS\n");
-		for (int N = 1000; N <= 5000; N = N + 100) {
+		for (int N = 1000; N <= 500; N = N + 100) {
 			int ejec = N / 100;
 			for (int M = 1; M <= ejec; M++) {
 				int[] array2 = ArrayMethods.getArray(AC, N, 1, N);

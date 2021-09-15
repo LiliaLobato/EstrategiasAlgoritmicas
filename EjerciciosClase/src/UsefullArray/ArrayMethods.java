@@ -41,6 +41,16 @@ public class ArrayMethods {
 		}
 		return array;
 	}
+	
+	// CREACION DEL ARRAY CON CONTENIDO ORDENADO
+	public static int[] createSpecialArray(int N, int min) {
+		int[] array = new int[N];
+		array[0] = min;
+		for (int i = 1; i < N; i++) {
+			array[i] = array[i - 1] + (int) (1);
+		}
+		return array;
+	}
 
 	// CREACION DEL ARRAY CON CONTENIDO ORDENADO INVERSO
 	public static int[] createInvertedArray(int N, int min) {
