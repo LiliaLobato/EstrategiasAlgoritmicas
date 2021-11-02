@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class BinarySearchTree<T extends Comparable<T>> {
 	private class TreeNode {
 		T key;
@@ -21,6 +24,36 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	public void print() {
 		print(this.root, "");
 		System.out.println();
+	}
+	
+	private int getLevel(TreeNode node) {
+		if (node == null) return 0;
+		
+		int leftD = getLevel(node.left);
+		int rightD = getLevel(node.right);
+		return (leftD > rightD)? leftD+1:rightD+1;
+	}
+	
+	private void nodeList (TreeNode node, List<Integer> arr, int level, int currentLevel) {
+		if (node == null) return;
+
+		if(level == currentLevel) arr.add((int) node.key);
+		currentLevel++;
+		nodeList(node.left, arr, level, currentLevel);
+		nodeList(node.right, arr, level, currentLevel);
+	}
+
+	public List<List<Integer>> nodeList (TreeNode node) {
+        List<Integer> arr=new ArrayList<>();
+        List<List<Integer>> Larr=new ArrayList<>();
+        int maxLevel = getLevel(this.root);
+		for(int i = 0; i < maxLevel; i++) {
+			nodeList(node,arr,i,0);
+	        List<Integer> cloned_arr = new ArrayList<Integer>(arr);
+			Larr.add(cloned_arr);
+			arr.clear();
+		}
+		return(Larr);
 	}
 	
 	private int sumInternalNodes(TreeNode node, int sum) {
@@ -56,6 +89,56 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	public int countGreaterThan(int key) {
 		int cnt = 0;
 		return countGreaterThan(this.root, key, cnt);
+	}
+
+	
+	public void allKeys(TreeNode node, ArrayList<Integer> arr) {
+		if(node == null) return;
+		
+		arr.add((int) node.key);				
+		allKeys(node.left,arr);
+		allKeys(node.right,arr);		
+		return;
+	}
+	
+	public boolean getPath(TreeNode node, ArrayList<Integer> arr ,int key) {
+		if(node == null) return false;
+		arr.add((int) node.key); //añadimos la llave
+		
+		//llegamos al nodo deseado, retorna
+		if((int)node.key == key) return true;
+		
+		//recorremos el árbol
+		if(getPath(node.left,arr,key) || getPath(node.right,arr,key)) return true;
+		
+		//si no estaba ni en left ni right, lo quitamos de la lista
+		arr.remove(arr.size()-1);
+		return false;
+	}
+	
+	public boolean sumOddPath(TreeNode node, int key) {
+		int cnt = 0;
+        ArrayList<Integer> arr=new ArrayList<>();
+        ArrayList<Integer> arrKeys=new ArrayList<>();
+        
+        //obtenemos todas las claves de los nodos
+        allKeys(node,arrKeys);
+        
+        //por cada una de las claves, obtenemos su path
+        for (int i=0; i<arrKeys.size(); i++) {          
+	        if(getPath(node,arr,arrKeys.get(i))) {
+	        	//recorremos el path y contamos los impares
+	            for (int j=0; j<arr.size(); j++) {  
+	                if(arr.get(j) % 2 != 0) cnt++;
+	            }
+	            //si encontramos un path con x num impares 
+	            // y no estamos en root, el path si exsite
+	        	if(cnt == key && cnt != 1) return true;
+	        }
+	        arr.clear();
+	        cnt=0;
+        }
+		return false;
 	}
 	
 	
@@ -286,13 +369,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
 	public static void main(String[] args) {
 		BinarySearchTree<Integer> intBST = new BinarySearchTree<>();
-		intBST.add(4);  intBST.add(2);  intBST.add(6);
-		intBST.add(1); intBST.add(3);   intBST.add(5);
-		intBST.add(7);  
+		intBST.add(5);  intBST.add(3);  intBST.add(7);
+		intBST.add(2); intBST.add(4);   intBST.add(6);
+		intBST.add(9);  
 		intBST.print();
+
+        
 	
-		boolean c1 = intBST.isFull(intBST.root);
-		System.out.println(c1);
+		System.out.println(intBST.sumOddPath(intBST.root, 1));
+		System.out.println(intBST.sumOddPath(intBST.root, 2));
+		System.out.println(intBST.sumOddPath(intBST.root, 3));
+		System.out.println(intBST.sumOddPath(intBST.root, 4));
+		
+		BinarySearchTree<Integer> intBST2 = new BinarySearchTree<>();
+		intBST2.add(5); intBST2.add(3);  intBST2.add(9);
+		intBST2.add(4); intBST2.add(8);   intBST2.add(2);
+		intBST2.add(6); intBST2.add(1);
+		intBST2.print();
+		
+		List<List<Integer>> nodeList = intBST2.nodeList(intBST2.root);
+		System.out.println(nodeList);
 		
     //           4
     //         /   \
@@ -303,4 +399,3 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
 	}
 }
-
